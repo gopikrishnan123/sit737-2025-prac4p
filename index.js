@@ -15,17 +15,37 @@ const logger = winston.createLogger({
   ],
 });
 
+// Middleware to get raw IP
+app.set('trust proxy', true);
+
 // Addition
 app.get('/add', (req, res) => {
   const num1 = parseFloat(req.query.num1);
   const num2 = parseFloat(req.query.num2);
   if (isNaN(num1) || isNaN(num2)) {
-    logger.error('Invalid input for addition');
+    logger.error({
+      message: 'Invalid input for addition',
+      ip: req.ip,
+      method: req.method,
+      url: req.originalUrl,
+      headers: req.headers,
+      status: 400
+    });
     return res.status(400).json({ error: 'Invalid numbers' });
   }
 
-  logger.info(`Addition requested: ${num1} + ${num2}`);
-  res.json({ result: num1 + num2 });
+  const result = num1 + num2;
+  logger.info({
+    message: 'Addition operation',
+    ip: req.ip,
+    method: req.method,
+    url: req.originalUrl,
+    headers: req.headers,
+    status: 200,
+    response: { result }
+  });
+
+  res.json({ result });
 });
 
 // Subtraction
@@ -33,12 +53,29 @@ app.get('/subtract', (req, res) => {
   const num1 = parseFloat(req.query.num1);
   const num2 = parseFloat(req.query.num2);
   if (isNaN(num1) || isNaN(num2)) {
-    logger.error('Invalid input for subtraction');
+    logger.error({
+      message: 'Invalid input for subtraction',
+      ip: req.ip,
+      method: req.method,
+      url: req.originalUrl,
+      headers: req.headers,
+      status: 400
+    });
     return res.status(400).json({ error: 'Invalid numbers' });
   }
 
-  logger.info(`Subtraction requested: ${num1} - ${num2}`);
-  res.json({ result: num1 - num2 });
+  const result = num1 - num2;
+  logger.info({
+    message: 'Subtraction operation',
+    ip: req.ip,
+    method: req.method,
+    url: req.originalUrl,
+    headers: req.headers,
+    status: 200,
+    response: { result }
+  });
+
+  res.json({ result });
 });
 
 // Multiplication
@@ -46,12 +83,29 @@ app.get('/multiply', (req, res) => {
   const num1 = parseFloat(req.query.num1);
   const num2 = parseFloat(req.query.num2);
   if (isNaN(num1) || isNaN(num2)) {
-    logger.error('Invalid input for multiplication');
+    logger.error({
+      message: 'Invalid input for multiplication',
+      ip: req.ip,
+      method: req.method,
+      url: req.originalUrl,
+      headers: req.headers,
+      status: 400
+    });
     return res.status(400).json({ error: 'Invalid numbers' });
   }
 
-  logger.info(`Multiplication requested: ${num1} * ${num2}`);
-  res.json({ result: num1 * num2 });
+  const result = num1 * num2;
+  logger.info({
+    message: 'Multiplication operation',
+    ip: req.ip,
+    method: req.method,
+    url: req.originalUrl,
+    headers: req.headers,
+    status: 200,
+    response: { result }
+  });
+
+  res.json({ result });
 });
 
 // Division
@@ -59,16 +113,40 @@ app.get('/divide', (req, res) => {
   const num1 = parseFloat(req.query.num1);
   const num2 = parseFloat(req.query.num2);
   if (isNaN(num1) || isNaN(num2)) {
-    logger.error('Invalid input for division');
+    logger.error({
+      message: 'Invalid input for division',
+      ip: req.ip,
+      method: req.method,
+      url: req.originalUrl,
+      headers: req.headers,
+      status: 400
+    });
     return res.status(400).json({ error: 'Invalid numbers' });
   }
   if (num2 === 0) {
-    logger.error('Division by zero attempted');
+    logger.error({
+      message: 'Division by zero attempted',
+      ip: req.ip,
+      method: req.method,
+      url: req.originalUrl,
+      headers: req.headers,
+      status: 400
+    });
     return res.status(400).json({ error: 'Cannot divide by zero' });
   }
 
-  logger.info(`Division requested: ${num1} / ${num2}`);
-  res.json({ result: num1 / num2 });
+  const result = num1 / num2;
+  logger.info({
+    message: 'Division operation',
+    ip: req.ip,
+    method: req.method,
+    url: req.originalUrl,
+    headers: req.headers,
+    status: 200,
+    response: { result }
+  });
+
+  res.json({ result });
 });
 
 app.listen(port, () => {
